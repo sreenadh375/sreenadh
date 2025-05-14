@@ -1,0 +1,80 @@
+import pandas as pd
+import random
+import time
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from cryptography.fernet import Fernet
+import logging
+
+# -----------------------------
+# 1. Refined AI Model (Prediction)
+# -----------------------------
+print("=== AI Model: Infrastructure Demand Forecast ===")
+# Simulated dataset
+data = pd.DataFrame({
+    'population_density': [3000, 10000, 7000, 4000],
+    'traffic_flow': [120, 300, 250, 150],
+    'green_space': [8, 2, 5, 12],
+    'infra_demand': [75, 95, 90, 60]  # target (scaled demand)
+})
+
+X = data[['population_density', 'traffic_flow', 'green_space']]
+y = data['infra_demand']
+
+model = RandomForestRegressor(n_estimators=10, random_state=0)
+model.fit(X, y)
+pred = model.predict([[9000, 280, 3]])
+print(f"Predicted infrastructure demand: {round(pred[0], 2)}%")
+
+# -----------------------------
+# 2. Decision Support Chatbot
+# -----------------------------
+def planner_chatbot(query):
+    query = query.lower()
+    if "infrastructure" in query or "growth" in query:
+        return "The system forecasts a 90% demand in zones with high population and low green space."
+    elif "real-time" in query or "sensors" in query:
+        return "Live metrics show traffic congestion in Zone 3 and poor air quality in Zone 5."
+    else:
+        return "Please ask about infrastructure, growth forecasts, or live metrics."
+
+print("\n=== Chatbot Response ===")
+print(planner_chatbot("What is the infrastructure forecast for high growth areas?"))
+
+# -----------------------------
+# 3. Simulated Real-Time IoT Sensor Input
+# -----------------------------
+print("\n=== IoT/Remote Sensing Data ===")
+iot_data = {
+    'air_quality_index': random.randint(50, 200),
+    'pedestrian_flow': random.randint(100, 1000),
+    'drone_footage_processed': True
+}
+print(iot_data)
+
+# -----------------------------
+# 4. Data Security Test
+# -----------------------------
+print("\n=== Data Security Encryption Test ===")
+key = Fernet.generate_key()
+cipher = Fernet(key)
+secure_data = b"Sensitive urban mobility pattern: Zone 5 congestion at 6PM"
+encrypted = cipher.encrypt(secure_data)
+decrypted = cipher.decrypt(encrypted)
+print("Encrypted:", encrypted)
+print("Decrypted:", decrypted.decode())
+
+# -----------------------------
+# 5. Performance Testing Metrics
+# -----------------------------
+print("\n=== Performance Metrics ===")
+start_time = time.time()
+# Simulated planning computation
+for _ in range(10000): sum([i * i for i in range(100)])
+end_time = time.time()
+response_time = end_time - start_time
+print(f"Simulation Response Time: {round(response_time, 2)} seconds")
+
+# Log setup
+logging.basicConfig(filename='urban_ai_log.txt', level=logging.INFO)
+logging.info(f"Session completed - Time taken: {response_time:.2f}s, IoT input: {iot_data}")
