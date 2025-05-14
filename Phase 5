@@ -1,0 +1,90 @@
+import pandas as pd
+import random
+import time
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from cryptography.fernet import Fernet
+import logging
+
+# -----------------------------
+# 1. Predictive Planning Model
+# -----------------------------
+print("=== Predictive Planning Output ===")
+df = pd.DataFrame({
+    'pop_density': [4000, 7000, 10000, 8500],
+    'green_space': [10, 6, 2, 3],
+    'traffic_index': [60, 80, 95, 90],
+    'infrastructure_score': [65, 80, 95, 90]
+})
+X = df[['pop_density', 'green_space', 'traffic_index']]
+y = df['infrastructure_score']
+model = LinearRegression()
+model.fit(X, y)
+future_zone = [[9000, 3, 85]]
+predicted = model.predict(future_zone)[0]
+print(f"Predicted infrastructure score: {round(predicted, 2)}")
+
+# -----------------------------
+# 2. Real-Time Sensor Simulation
+# -----------------------------
+print("\n=== Real-Time Sensor Feed ===")
+sensor_data = {
+    'air_quality': random.randint(40, 150),
+    'temperature': round(random.uniform(22.0, 35.0), 1),
+    'crowd_density': random.randint(100, 800)
+}
+print(sensor_data)
+
+# -----------------------------
+# 3. User Dashboard Emulation
+# -----------------------------
+def dashboard(query):
+    query = query.lower()
+    if "congestion" in query:
+        return f"Live congestion zone: {random.choice(['Zone A', 'Zone C'])} at {random.randint(70,100)}%"
+    elif "green space" in query:
+        return "Recommended green space: 15% minimum for Zone B"
+    else:
+        return "Please specify 'congestion' or 'green space'."
+
+print("\n=== User Dashboard Query ===")
+print(dashboard("Show me congestion forecast"))
+print(dashboard("What is the green space recommendation?"))
+
+# -----------------------------
+# 4. Data Security & Compliance
+# -----------------------------
+print("\n=== Encryption Test (Compliance) ===")
+key = Fernet.generate_key()
+cipher = Fernet(key)
+sensitive_data = b"User entry: Location X, crowd density high at 5PM"
+encrypted = cipher.encrypt(sensitive_data)
+decrypted = cipher.decrypt(encrypted)
+print("Encrypted (sample):", encrypted[:30], "...")
+print("Decrypted:", decrypted.decode())
+
+# -----------------------------
+# 5. Performance Benchmark
+# -----------------------------
+print("\n=== System Performance ===")
+start = time.time()
+# Simulate workload
+for _ in range(5000): sum([x**2 for x in range(100)])
+end = time.time()
+print(f"Planning module runtime: {round(end - start, 2)} sec")
+
+# -----------------------------
+# 6. Logging Output for Documentation
+# -----------------------------
+logging.basicConfig(filename='phase5_demo.log', level=logging.INFO)
+logging.info(f"Infrastructure prediction: {predicted:.2f}")
+logging.info(f"Sensor data: {sensor_data}")
+logging.info("Encrypted user data stored successfully.")
+
+# -----------------------------
+# 7. Optional: Visual Dashboard Output
+# -----------------------------
+plt.bar(['Pop', 'Green', 'Traffic'], future_zone[0], color=['blue', 'green', 'red'])
+plt.title('Urban Metric Snapshot for Zone X')
+plt.ylabel('Scaled Value')
+plt.show()
