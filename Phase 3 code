@@ -1,0 +1,67 @@
+import random
+import pandas as pd
+from sklearn.cluster import KMeans
+from cryptography.fernet import Fernet
+
+# -----------------------------
+# 1. Sample Urban Dataset
+# -----------------------------
+data = pd.DataFrame({
+    'lat': [12.9716, 12.9352, 12.9866, 12.9719],
+    'lon': [77.5946, 77.6101, 77.5361, 77.6412],
+    'traffic': [80, 65, 90, 40],  # congestion level
+    'green_space': [10, 20, 5, 15],  # %
+    'pollution': [70, 55, 90, 40]  # AQI
+})
+
+# -----------------------------
+# 2. AI Model for Zoning Suggestion
+# -----------------------------
+kmeans = KMeans(n_clusters=2, random_state=0).fit(data[['traffic', 'green_space', 'pollution']])
+data['zone'] = kmeans.labels_
+
+print("=== Zoning and Congestion Analysis ===")
+print(data)
+
+# -----------------------------
+# 3. Simple Chatbot Interface
+# -----------------------------
+def chatbot(question):
+    if "park" in question.lower():
+        idx = data['green_space'].idxmin()
+        return f"Suggested park location: Lat {data.at[idx, 'lat']}, Lon {data.at[idx, 'lon']}"
+    elif "congestion" in question.lower():
+        idx = data['traffic'].idxmax()
+        return f"High congestion zone: Lat {data.at[idx, 'lat']}, Lon {data.at[idx, 'lon']}"
+    else:
+        return "I'm still learning. Try asking about parks or congestion."
+
+print("\n=== Chatbot Demo ===")
+print(chatbot("Where should a new park be located?"))
+print(chatbot("What are high-congestion zones?"))
+
+# -----------------------------
+# 4. Simulated IoT Sensor Data
+# -----------------------------
+iot_data = {
+    'vehicle_count': random.randint(500, 2000),
+    'noise_level_db': random.uniform(50, 90),
+    'air_quality_index': random.randint(50, 200)
+}
+
+print("\n=== Simulated IoT Data ===")
+print(iot_data)
+
+# -----------------------------
+# 5. Data Privacy using Encryption
+# -----------------------------
+key = Fernet.generate_key()
+cipher = Fernet(key)
+
+location_input = b"User location: 12.9716, 77.5946"
+encrypted = cipher.encrypt(location_input)
+decrypted = cipher.decrypt(encrypted)
+
+print("\n=== Encrypted Location Input ===")
+print("Encrypted:", encrypted)
+print("Decrypted:", decrypted.decode())
